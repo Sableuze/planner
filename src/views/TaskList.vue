@@ -2,7 +2,9 @@
   <div class="py-5 an-appear">
     <h1>List</h1>
     <hr />
+
     <b-table
+      v-if="getTasks.length"
       :items="getTasks"
       :fields="fields"
       :current-page="currentPage"
@@ -13,7 +15,6 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       stacked="md"
-      show-empty
       small
       sort-icon-left
       label-align-sm="left"
@@ -42,6 +43,20 @@
         </b-card>
       </template>
     </b-table>
+    <p class="nothing-to-show" v-else>
+      There are no tasks yes <br />
+      Try adding one
+    </p>
+    <b-col v-if="getTasks.length > perPage" sm="7" md="6" class="my-3">
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="getTasks.length"
+        :per-page="perPage"
+        align="fill"
+        size="sm"
+        class="my-0"
+      ></b-pagination>
+    </b-col>
   </div>
 </template>
 
@@ -84,7 +99,7 @@ export default {
       ],
       totalRows: 1,
       currentPage: 1,
-      perPage: 5,
+      perPage: 10,
       pageOptions: [5, 10, 15, {value: 100, text: 'Show a lot'}],
       sortBy: '',
       sortDesc: false,
@@ -112,9 +127,9 @@ export default {
       this.infoModal.title = ''
       this.infoModal.content = ''
     },
-    onFiltered(filteredItems) {
+    onFiltered(getTasks) {
       // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length
+      this.totalRows = getTasks.length
       this.currentPage = 1
     },
   },
@@ -122,7 +137,12 @@ export default {
 </script>
 
 <style lang="scss">
-.text {
+.nothing-to-show {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+}
+td > div {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

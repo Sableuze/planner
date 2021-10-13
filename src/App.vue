@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Navbar />
-    <div class="container">
+    <Navbar class="header" />
+    <div class="container" :style="{paddingTop: headerHeight + 'px'}">
       <router-view></router-view>
     </div>
   </div>
@@ -16,9 +16,20 @@ export default {
   created() {
     this.checkIsLoggedIn()
   },
+  mounted() {
+    this.headerHeight = document.querySelector('.header').clientHeight
+  },
+  computed: {},
+
   components: {
     Navbar,
   },
+  data() {
+    return {
+      headerHeight: 0,
+    }
+  },
+
   methods: {
     checkIsLoggedIn() {
       if (!this.$store.state.auth.isLoggedIn) {

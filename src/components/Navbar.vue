@@ -1,37 +1,33 @@
 <template>
-  <div>
-    <b-navbar toggleable="lg" type="light" variant="danger">
-      <router-link
-        tag="b-navbar-brand"
-        style="cursor: pointer"
-        :to="{name: 'home'}"
-        class="an-move-left"
-        >Home</router-link
-      >
+  <b-navbar toggleable="lg" fixed="top" type="light" variant="danger">
+    <router-link
+      tag="b-navbar-brand"
+      style="cursor: pointer"
+      :to="{name: 'home'}"
+      class="an-move-left"
+      >Home</router-link
+    >
 
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      <b-collapse id="nav-collapse" class="an-move-right" is-nav>
-        <b-navbar-nav class="ml-auto align-items-center">
-          <router-link tag="b-nav-item" :to="{name: 'tasks'}"
-            >Tasks</router-link
+    <b-collapse id="nav-collapse" class="an-move-right" is-nav>
+      <b-navbar-nav class="ml-auto align-items-center">
+        <router-link tag="b-nav-item" :to="{name: 'tasks'}">Tasks</router-link>
+
+        <router-link tag="b-nav-item" :to="{name: 'addTask'}"
+          >Add Task</router-link
+        >
+        <b-nav-item>
+          <b-button
+            v-if="isRegOrLog"
+            @click.prevent="onLogOut"
+            variant="success"
+            >Log Out</b-button
           >
-
-          <router-link tag="b-nav-item" :to="{name: 'addTask'}"
-            >Add Task</router-link
-          >
-          <b-nav-item>
-            <b-button
-              v-if="isRegOrLog"
-              @click.prevent="onLogOut"
-              variant="success"
-              >Log Out</b-button
-            >
-          </b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-  </div>
+        </b-nav-item>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
 </template>
 
 <script>

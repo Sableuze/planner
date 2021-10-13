@@ -1,5 +1,5 @@
 <template>
-  <b-container class="py-5 w-75" fluid>
+  <b-container class="py-5 w-75 an-appear" fluid>
     <h1 class="mb-2">Add a new task</h1>
     <form @submit.prevent="onSubmit">
       <b-form-row class="flex flex-column gap">
@@ -49,13 +49,14 @@
             class="mb-2"
             selected-variant="warning"
             today-variant="danger"
-            :state="!!date"
             :date-format-options="{
               year: 'numeric',
               month: 'numeric',
               day: 'numeric',
             }"
             :min="dateToday"
+            :state="isDateValid"
+            required
           ></b-form-datepicker>
         </b-row>
         <button
@@ -71,6 +72,8 @@
 </template>
 
 <script>
+import gsap from 'gsap'
+
 export default {
   name: 'AddTask',
 
@@ -84,12 +87,29 @@ export default {
     }
   },
 
+  mounted() {
+    gsap.fromTo('.an-appear', {opacity: 0}, {opacity: 1, duration: 1})
+  },
   computed: {
     isSubmitting() {
       return this.$store.state.isSubmitting
     },
     dateToday() {
       return this.$store.getters.dateToday()
+    },
+    isDateValid() {
+      switch (this.date) {
+        case true: {
+          return true
+        }
+        case null: {
+          return null
+        }
+        case undefined: {
+          return false
+        }
+      }
+      return true
     },
   },
   methods: {
@@ -98,16 +118,25 @@ export default {
         this.description = this.description.substr(0, this.maxNumberOfWords)
       }
     },
+
+    checkRequired() {
+      if (this.date) return true
+      else {
+        this.date = undefined
+      }
+    },
     async onSubmit() {
-      await this.$store.dispatch('addTask', {
-        id: Date.now(),
-        title: this.title,
-        status: 'active',
-        tags: this.tags,
-        description: this.description,
-        date: this.date,
-      })
-      this.$router.push({name: 'tasks'})
+      if (this.checkRequired()) {
+        await this.$store.dispatch('addTask', {
+          id: Date.now(),
+          title: this.title,
+          status: 'active',
+          tags: this.tags,
+          description: this.description,
+          date: this.date,
+        })
+        this.$router.push({name: 'tasks'})
+      }
     },
   },
 }

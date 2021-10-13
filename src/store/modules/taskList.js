@@ -1,5 +1,5 @@
 const state = {
-  tasks: JSON.parse(localStorage.getItem('tasks')).map(validateTask) || [],
+  tasks: setTaskList(),
 }
 
 const mutations = {
@@ -75,6 +75,15 @@ function validateTask(value) {
           : 'outdated'
     }
     return value
+  }
+}
+
+function setTaskList() {
+  try {
+    let tasks = JSON.parse(localStorage.getItem('tasks')).map(validateTask)
+    return tasks
+  } catch (err) {
+    return []
   }
 }
 export default {
